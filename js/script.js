@@ -14,29 +14,26 @@ document.getElementById('sign-in-form').addEventListener('submit', async functio
 
     const username = document.getElementById('username_login').value;
     const password = document.getElementById('password_login').value;
-    
-    const body = new URLSearchParams({
-        username: username,
-        password: password
-    }).toString();
+
+    const body = new URLSearchParams(
+        {
+            username: username,
+            password: password
+        }
+    );
 
     try {
-        const response = await fetch('https://user-service-s2mr.onrender.com/api/login', {
+        const response = fetch('https://user-service-s2mr.onrender.com/api/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'text/plain; charset=utf-8'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: body
+            body: body.toString()
+        })
+        .then(response => {
+            response.status === 200 ? alert('Inicio de sesión exitoso') : alert('Error en el inicio de sesión');
         });
         
-        if (response.ok) {
-            const data = await response.json();
-            alert('Inicio de sesión exitoso');
-            console.log(data);
-        } else {
-            const errorData = await response.json();
-            alert('Error en el inicio de sesión: ' + errorData.detail);
-        }
     } catch (error) {
         alert('Error en el inicio de sesión');         
     }
@@ -60,24 +57,20 @@ document.getElementById('create-acount-form').addEventListener('submit', async f
         email: email,
         password: password
     };
+    console.log(body);
 
     try {
         const response = await fetch('https://user-service-s2mr.onrender.com/api/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
-        
-        if (response.ok) {
-            const data = await response.json();
-            alert('Inicio de sesión exitoso');
-            console.log(data);
-        } else {
-            const errorData = await response.json();
-            alert('Error en el inicio de sesión: ' + errorData.detail);
+        if (!response.ok) {
+            alert('Error en la creación de usuario');
         }
+        alert('Usuario creado exitosamente');
     } catch (error) {
         alert('Error en el inicio de sesión');
         console.error('Error:', error);        
